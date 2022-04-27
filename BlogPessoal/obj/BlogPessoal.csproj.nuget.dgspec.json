@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\User\\Desktop\\Joceline\\C#\\visual studio\\CSharp\\BPVS\\BlogPessoal\\BlogPessoal\\BlogPessoal.csproj": {}
+    "C:\\Users\\User\\Desktop\\Blog Pessoal\\BlogPessoal\\BlogPessoal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\User\\Desktop\\Joceline\\C#\\visual studio\\CSharp\\BPVS\\BlogPessoal\\BlogPessoal\\BlogPessoal.csproj": {
+    "C:\\Users\\User\\Desktop\\Blog Pessoal\\BlogPessoal\\BlogPessoal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\User\\Desktop\\Joceline\\C#\\visual studio\\CSharp\\BPVS\\BlogPessoal\\BlogPessoal\\BlogPessoal.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\Blog Pessoal\\BlogPessoal\\BlogPessoal.csproj",
         "projectName": "BlogPessoal",
-        "projectPath": "C:\\Users\\User\\Desktop\\Joceline\\C#\\visual studio\\CSharp\\BPVS\\BlogPessoal\\BlogPessoal\\BlogPessoal.csproj",
+        "projectPath": "C:\\Users\\User\\Desktop\\Blog Pessoal\\BlogPessoal\\BlogPessoal.csproj",
         "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\User\\Desktop\\Joceline\\C#\\visual studio\\CSharp\\BPVS\\BlogPessoal\\BlogPessoal\\obj\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\Blog Pessoal\\BlogPessoal\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,6 +39,22 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.13, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.13, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
