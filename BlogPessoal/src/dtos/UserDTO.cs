@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using BlogPessoal.src.utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlogPessoal.src.dtos
 {
     /// <summary>
     /// <para>Resume: Mirror class responsible for create a new user</para>
-    /// <para>Criate by: Joceline Gutierrez</para>
+    /// <para>Created by: Joceline Gutierrez</para>
     /// <para>Version: 1.0</para>
     /// <para>Date: 29/04/2022</para>
     /// </summary>
@@ -21,12 +22,16 @@ namespace BlogPessoal.src.dtos
 
         public string Photo { get; set; }
 
-        public AddUserDTO(string name, string email, string password, string photo)
+        [Required]
+        public UserType Type { get; set; }
+
+        public AddUserDTO(string name, string email, string password, string photo, UserType type)
         {
             Name = name;
             Email = email;
             Password = password;
             Photo = photo;
+            Type = type;
 
         }
     }
@@ -39,6 +44,9 @@ namespace BlogPessoal.src.dtos
     /// </summary>
     public class UpdateUserDTO
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required, StringLength(50)]
         public string Name { get; set; }
 
@@ -47,8 +55,9 @@ namespace BlogPessoal.src.dtos
 
         public string Photo { get; set; }
 
-        public UpdateUserDTO(string name, string password, string photo)
+        public UpdateUserDTO(int id, string name, string password, string photo)
         {
+            Id = id;
             Name = name;
             Password = password;
             Photo = photo;

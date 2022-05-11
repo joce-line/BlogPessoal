@@ -16,6 +16,6 @@ namespace BlogPessoal.src.models
         public string Description { get; set; }
 
         [JsonIgnore]
-        public List<PostModel> RelatedPosts { get; set; }
+        public List<PostModel> MyPosts { get; set; }
     }
 }

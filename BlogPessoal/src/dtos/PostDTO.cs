@@ -4,7 +4,7 @@ namespace BlogPessoal.src.dtos
 {
     /// <summary>
     /// <para>Resume: Mirror class responsible for create a new theme</para>
-    /// <para>Criate by: Joceline Gutierrez</para>
+    /// <para>Created by: Joceline Gutierrez</para>
     /// <para>Version: 1.0</para>
     /// <para>Date: 29/04/2022</para>
     /// </summary>
@@ -43,6 +43,9 @@ namespace BlogPessoal.src.dtos
 
     public class UpdatePostDTO
     {
+        [Required]
+        public int Id { get; set; }
+
         [Required, StringLength(30)]
         public string Title { get; set; }
 
@@ -54,8 +57,9 @@ namespace BlogPessoal.src.dtos
         [Required]
         public string DescriptionTheme { get; set; }
 
-        public UpdatePostDTO(string title, string description, string photo, string descriptionTheme)
+        public UpdatePostDTO(int id, string title, string description, string photo, string descriptionTheme)
         {
+            Id = id;
             Title = title;
             Description = description;
             Photo = photo;
