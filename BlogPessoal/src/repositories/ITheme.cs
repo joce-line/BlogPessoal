@@ -6,14 +6,14 @@ namespace BlogPessoal.src.repositories
 {
     /// <summary>
     /// <para>Resume: Interface responsible for representing CRUD actions themes</para>
-    /// <para>Create by: Joceline Gutierrez</para>
+    /// <para>Created by: Joceline Gutierrez</para>
     /// <para>Version: 1.0</para>
     /// <para>Date: 29/04/2022</para>
     /// </summary>
     public interface ITheme
     {
-        void AddTheme(AddThemeDTO user);
-        void UpdateTheme(UpdateThemeDTO user);
+        void AddTheme(AddThemeDTO theme);
+        void UpdateTheme(UpdateThemeDTO theme);
         void DeleteTheme(int id);
         ThemeModel GetThemeById(int id);
         List<ThemeModel> GetThemeByDescription(string description);

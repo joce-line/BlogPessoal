@@ -23,6 +23,7 @@ namespace BlogPessoalTeste.Tests.data
 
 
         [TestMethod]
+        [Ignore]
         public void InsertNewUserOnBaseReturnUser()
         {
             UserModel user = new UserModel();
