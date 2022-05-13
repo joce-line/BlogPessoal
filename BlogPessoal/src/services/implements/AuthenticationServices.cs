@@ -7,6 +7,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BlogPessoal.src.services.implements
 {
@@ -27,12 +28,12 @@ namespace BlogPessoal.src.services.implements
 
         #region Methods
 
-        public void CreateUserNotDuplicated(AddUserDTO dto)
+        public async Task CreateUserNotDuplicatedAsync(AddUserDTO dto)
         {
-            var user = _repository.GetUserByEmail(dto.Email);
+            var user = await _repository.GetUserByEmailAsync(dto.Email);
             if (user != null) throw new Exception("Este email já está sendo utilizado");
             dto.Password = EncodePassword(dto.Password);
-            _repository.AddUser(dto);
+            await _repository.AddUserAsync(dto);
         }
 
         public string EncodePassword(string password)
@@ -63,9 +64,9 @@ namespace BlogPessoal.src.services.implements
             return tokenHandler.WriteToken(token);  
         }
 
-        public AuthorizationDTO GetAuthorization(AuthenticationDTO dto)
+        public async Task<AuthorizationDTO> GetAuthorizationAsync(AuthenticationDTO dto)
         {
-            var user = _repository.GetUserByEmail(dto.Email);
+            var user = await _repository.GetUserByEmailAsync(dto.Email);
 
             if (user == null) throw new Exception("Usuário não encontrado");
 

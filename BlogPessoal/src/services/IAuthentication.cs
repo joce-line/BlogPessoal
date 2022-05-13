@@ -1,13 +1,14 @@
 ﻿using BlogPessoal.src.dtos;
 using BlogPessoal.src.models;
+using System.Threading.Tasks;
 
 namespace BlogPessoal.src.services
 {
     public interface IAuthentication
     {
         string EncodePassword(string password);
-        void CreateUserNotDuplicated(AddUserDTO dto);
+        Task CreateUserNotDuplicatedAsync(AddUserDTO dto);
         string GenerateToken(UserModel user);
-        AuthorizationDTO GetAuthorization(AuthenticationDTO dto);
+        Task<AuthorizationDTO> GetAuthorizationAsync(AuthenticationDTO dto);
     }
 }
