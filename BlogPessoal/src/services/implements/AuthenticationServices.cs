@@ -11,6 +11,12 @@ using System.Threading.Tasks;
 
 namespace BlogPessoal.src.services.implements
 {
+    /// <summary>
+    /// <para>Resume: Class responsible for implement IAuthentication</para>
+    /// <para>Created by: Joceline Gutierrez</para>
+    /// <para>Version: 1.0</para>
+    /// <para>Date: 12/05/2022</para>
+    /// </summary>
     public class AuthenticationServices : IAuthentication
     {
         #region Attributes 
@@ -28,6 +34,10 @@ namespace BlogPessoal.src.services.implements
 
         #region Methods
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method responsible for create user without duplicate on data base</para>
+        /// </summary>
+        /// <param name="dto">AddUserDTO</param>
         public async Task CreateUserNotDuplicatedAsync(AddUserDTO dto)
         {
             var user = await _repository.GetUserByEmailAsync(dto.Email);
@@ -36,12 +46,22 @@ namespace BlogPessoal.src.services.implements
             await _repository.AddUserAsync(dto);
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for encode password</para>
+        /// </summary>
+        /// <param name="password">Password to be encryped</param>
+        /// <returns>string</returns>
         public string EncodePassword(string password)
         {
             var bytes = Encoding.UTF8.GetBytes(password);
             return Convert.ToBase64String(bytes);
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for generate token</para>
+        /// </summary>
+        /// <param name="user">UserModel</param>
+        /// <returns>string</returns>
         public string GenerateToken(UserModel user)
         {
             var tokenHandler = new JwtSecurityTokenHandler(); 
@@ -64,6 +84,13 @@ namespace BlogPessoal.src.services.implements
             return tokenHandler.WriteToken(token);  
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method responsible to return authorization to authenticated user</para>
+        /// </summary>
+        /// <param name="dto">AuthenticationDTO</param>
+        /// <returns>AuthorizationDTO</returns>
+        /// <exception cref="Exception">User not found</exception>
+        /// <exception cref="Exception">Incorrect Password</exception>
         public async Task<AuthorizationDTO> GetAuthorizationAsync(AuthenticationDTO dto)
         {
             var user = await _repository.GetUserByEmailAsync(dto.Email);

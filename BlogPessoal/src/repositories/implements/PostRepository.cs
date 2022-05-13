@@ -8,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace BlogPessoal.src.repositories.implements
 {
+    /// <summary>
+    /// <para>Resume: Class responsible for implement IPost</para>
+    /// <para>Created by: Joceline Gutierrez</para>
+    /// <para>Version: 1.0</para>
+    /// <para>Date: 12/05/2022</para>
+    /// </summary>
+
     public class PostRepository : IPost
     {
         #region Atributtes
@@ -18,6 +25,10 @@ namespace BlogPessoal.src.repositories.implements
 
         #region Contructors
 
+        /// <summary>
+        /// <para>Resume: Constructor of class.</para>
+        /// </summary>
+        /// <param name="context">PersonalBlogContext</param>
         public PostRepository(PersonalBlogContext context)
         {
             _context = context;
@@ -26,23 +37,44 @@ namespace BlogPessoal.src.repositories.implements
         #endregion Constructors
 
         #region Methods
+
+        /// <summary>
+        /// <para>Resume: Asynchronous method for delete a post</para>
+        /// </summary>
+        /// <param name="id">Id of post</param>
         public async Task DeletePostAsync(int id)
         {
             _context.Posts.Remove(await GetPostByIdAsync(id));
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for get all posts</para>
+        /// </summary>
+        /// <returns>List of PostModel</returns>
         public async Task<List<PostModel>> GetAllPostsAsync()
         {
             return await _context.Posts
                 .ToListAsync();
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for get a post by id</para>
+        /// </summary>
+        /// <param name="id">Id of post</param>
+        /// <returns>PostModel</returns>
         public async Task<PostModel> GetPostByIdAsync(int id)
         {
             return await _context.Posts.FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for get a theme by title or description theme or name creator</para>
+        /// </summary>
+        /// <param name="title">Title of theme</param>
+        /// <param name="descriptionTheme">Description of theme</param>
+        /// <param name="nameCreator">Creator of theme</param>
+        /// <returns>List of PostModel</returns>
         public async Task<List<PostModel>> GetPostBySearchAsync(string title, string descriptionTheme, string nameCreator)
         {
             switch (title, descriptionTheme, nameCreator)
@@ -101,6 +133,10 @@ namespace BlogPessoal.src.repositories.implements
             }
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for add a new post.</para>
+        /// </summary>
+        /// <param name="post">NewPostDTO</param>
         public async Task NewPostAsync(NewPostDTO post)
         {
             await _context.Posts.AddAsync(new PostModel
@@ -114,6 +150,10 @@ namespace BlogPessoal.src.repositories.implements
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// <para>Resume: Asynchronous method for update an existent post.</para>
+        /// </summary>
+        /// <param name="post">UpdatePostDTO</param>
         public async Task UpdatePostAsync(UpdatePostDTO post)
         {
             var existingPost = await GetPostByIdAsync(post.Id);
