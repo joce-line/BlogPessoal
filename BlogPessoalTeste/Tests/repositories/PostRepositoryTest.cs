@@ -22,7 +22,7 @@ namespace BlogPessoalTeste.Tests.repositories
         private IPost _repositoryP;
 
         [TestMethod]
-        public void CreateThreePotsInTheSystemReturnThree()
+        public async Task CreateThreePotsInTheSystemReturnThree()
         {
             //Definindo o contexto
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
@@ -36,21 +36,21 @@ namespace BlogPessoalTeste.Tests.repositories
 
             //GIVEN - Dado que registro 2 usuarios
 
-            _repositoryU.AddUser(
+            await _repositoryU.AddUserAsync(
                 new AddUserDTO
                 ("Joceline Gutierrez", "joceline@email.com", "3456543", "foto.img", UserType.NORMAL)
                 );
-            _repositoryU.AddUser(
+            await _repositoryU.AddUserAsync(
                 new AddUserDTO
                 ("Dálmata Diamante", "dalmante@email.com", "745348", "fotodiamante.img", UserType.NORMAL)
                 );
 
             //AND - e que registro 2 temas 
-            _repositoryT.AddTheme(new AddThemeDTO("Leitura"));
-            _repositoryT.AddTheme(new AddThemeDTO("Charadas"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Leitura"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Charadas"));
 
             //WHEN - Quando registro 3 postagens
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Indicação",
                 "Indicação de leituras para viagens",
@@ -58,7 +58,7 @@ namespace BlogPessoalTeste.Tests.repositories
                 "joceline@email.com",
                 "Leitura"
                 ));
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Livros",
                 "Livros que custam mais do que deviam",
@@ -66,7 +66,7 @@ namespace BlogPessoalTeste.Tests.repositories
                 "joceline@email.com",
                 "Leitura"
                 ));
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Pergunta",
                 "Quais as duas coisas que nunca se pode comer no café da manhã?",
@@ -76,13 +76,15 @@ namespace BlogPessoalTeste.Tests.repositories
                 ));
 
             //WHEN - Quando eu busco todas as postagens
+            var posts = await _repositoryP.GetAllPostsAsync();
+
             //THEN - Então eu tenho 3 postagens
 
-            Assert.AreEqual(3, _repositoryP.GetAllPosts().Count());
+            Assert.AreEqual(3, posts.Count());
         }
 
         [TestMethod]
-        public void UpdatePostReturnPostUpdated()
+        public async Task UpdatePostReturnPostUpdated()
         {
             //Definindo o contexto
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
@@ -95,17 +97,17 @@ namespace BlogPessoalTeste.Tests.repositories
             _repositoryP = new PostRepository(_context);
 
             //GIVEN - Dado que registro 1 usuario
-            _repositoryU.AddUser(
+            await _repositoryU.AddUserAsync(
                 new AddUserDTO
                 ("Joceline Gutierrez", "joceline@email.com", "3456543", "foto.img", UserType.NORMAL)
                 );
 
             //AND - E que registro 2 temas
-            _repositoryT.AddTheme(new AddThemeDTO("Leitura"));
-            _repositoryT.AddTheme(new AddThemeDTO("Charadas"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Leitura"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Charadas"));
 
             //AND - E que regisro uma postagem 
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Indicação",
                 "Indicação de leituras para viagens",
@@ -115,7 +117,7 @@ namespace BlogPessoalTeste.Tests.repositories
                 ));
 
             //WHEN - Quando atualizo postagem de id 1
-            _repositoryP.UpdatePost(
+            await _repositoryP.UpdatePostAsync(
                 new UpdatePostDTO(
                     1,
                 "Pergunta",
@@ -124,28 +126,30 @@ namespace BlogPessoalTeste.Tests.repositories
                 "Charadas"
                 ));
 
+            var post = await _repositoryP.GetPostByIdAsync(1);
+
             //THEN - Então eu tenho a postagem atualizada
             Assert.AreEqual(
                 "Pergunta",
-                _repositoryP.GetPostById(1).Title
+                post.Title
                 );
             Assert.AreEqual(
                 "Quais as duas coisas que nunca se pode comer no café da manhã?",
-                _repositoryP.GetPostById(1).Description
+                post.Description
                 );
             Assert.AreEqual(
                 "imagemPensadora20.img",
-                _repositoryP.GetPostById(1).Photo
+                post.Photo
                 );
             Assert.AreEqual(
                 "Charadas",
-                _repositoryP.GetPostById(1).Theme.Description
+                post.Description
                 );
 
         }
 
         [TestMethod]
-        public void GetPostsBySearchReturnCustom()
+        public async Task GetPostsBySearchReturnCustom()
         {
             //Definindo o contexto
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
@@ -159,21 +163,21 @@ namespace BlogPessoalTeste.Tests.repositories
 
             //GIVEN - Dado que registro 2 usuarios
 
-            _repositoryU.AddUser(
+            await _repositoryU.AddUserAsync(
                 new AddUserDTO
                 ("Joceline Gutierrez", "joceline@email.com", "3456543", "foto.img", UserType.NORMAL)
                 );
-            _repositoryU.AddUser(
+            await _repositoryU.AddUserAsync(
                 new AddUserDTO
                 ("Dálmata Diamante", "dalmante@email.com", "745348", "fotodiamante.img", UserType.NORMAL)
                 );
 
             //AND - E que registro 2 temas
-            _repositoryT.AddTheme(new AddThemeDTO("Leitura"));
-            _repositoryT.AddTheme(new AddThemeDTO("Charadas"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Leitura"));
+            await _repositoryT.AddThemeAsync(new AddThemeDTO("Charadas"));
 
             //WHEN - Quando registro 3 postagens
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Indicação de livros",
                 "Indicação de leituras para viagens",
@@ -181,7 +185,7 @@ namespace BlogPessoalTeste.Tests.repositories
                 "joceline@email.com",
                 "Leitura"
                 ));
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "livros",
                 "Livros que custam mais do que deviam",
@@ -189,7 +193,7 @@ namespace BlogPessoalTeste.Tests.repositories
                 "joceline@email.com",
                 "Leitura"
                 ));
-            _repositoryP.NewPost(
+            await _repositoryP.NewPostAsync(
                 new NewPostDTO(
                 "Pergunta",
                 "Quais as duas coisas que nunca se pode comer no café da manhã?",
@@ -199,16 +203,17 @@ namespace BlogPessoalTeste.Tests.repositories
                 ));
 
             //WHEN - Quando eu busco as postagens
+            var postsTest1 = await _repositoryP.GetPostBySearchAsync("livros", null, null);
+            var postsTest2 = await _repositoryP.GetPostBySearchAsync(null, null, "Joceline Gutierrez");
+            var postsTest3 = await _repositoryP.GetPostBySearchAsync(null, "Leitura", null);
+
             //RHEN - Então eu tenho as postagens que correspondem aos criterios
             Assert.AreEqual(
-                2,
-                _repositoryP.GetPostBySearch("livros", null, null).Count);
+                2, postsTest1.Count);
             Assert.AreEqual(
-                2,
-                _repositoryP.GetPostBySearch(null, null, "Joceline Gutierrez").Count);
+                2, postsTest2.Count);
             Assert.AreEqual(
-                2,
-                _repositoryP.GetPostBySearch(null, "Leitura", null).Count);
+                2, postsTest3.Count);
 
         }
 

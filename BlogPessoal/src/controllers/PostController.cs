@@ -2,6 +2,7 @@
 using BlogPessoal.src.repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BlogPessoal.src.controllers
 {
@@ -25,48 +26,48 @@ namespace BlogPessoal.src.controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult NewPost([FromBody] NewPostDTO post)
+        public async Task<IActionResult> NewPostAsync([FromBody] NewPostDTO post)
         {            
             if (!ModelState.IsValid) return BadRequest();
 
-            _repository.NewPost(post);
+            await _repository.NewPostAsync(post);
             return Created($"api/Posts", post);
         }
 
         [HttpPut]
         [Authorize]
-        public IActionResult UpdatePost([FromBody] UpdatePostDTO post)
+        public async Task<IActionResult> UpdatePostAsync([FromBody] UpdatePostDTO post)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            _repository.UpdatePost(post);
+            await _repository.UpdatePostAsync(post);
             return Ok(post);
         }
 
         [HttpDelete("delete/{idPost}")]
         [Authorize]
-        public IActionResult DeletePost([FromRoute] int idPost)
+        public async Task<IActionResult> DeletePostAsync([FromRoute] int idPost)
         {
-            _repository.DeletePost(idPost);
+            await _repository.DeletePostAsync(idPost);
             return NoContent();
         }
 
         [HttpGet("id/{idPost}")]
         [Authorize]
-        public IActionResult GetPostById([FromRoute] int idPost)
+        public async Task<IActionResult> GetPostByIdAsync([FromRoute] int idPost)
         {
-            var post = _repository.GetPostById(idPost);
+            var post = await _repository.GetPostByIdAsync(idPost);
 
             if (post == null) return NotFound();
 
             return Ok(post);
         }
 
-        [HttpGet]
+        [HttpGet("list")]
         [Authorize]
-        public IActionResult GetAllPosts()
+        public async Task<IActionResult> GetAllPostsAsync()
         {
-            var list = _repository.GetAllPosts();
+            var list = await _repository.GetAllPostsAsync();
 
             if (list.Count < 1) return NoContent();
 
@@ -75,12 +76,12 @@ namespace BlogPessoal.src.controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetPostBySearch(
+        public async Task<IActionResult> GetPostBySearchAsync(
             [FromQuery] string title,
             [FromQuery] string descriptionTheme,
             [FromQuery] string nameCreator)
         {
-            var posts = _repository.GetPostBySearch(title, descriptionTheme, nameCreator);
+            var posts = await _repository.GetPostBySearchAsync(title, descriptionTheme, nameCreator);
             if (posts.Count < 1) return NoContent();
             return Ok(posts);
         }
