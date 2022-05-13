@@ -1,8 +1,10 @@
 ﻿using BlogPessoal.src.data;
 using BlogPessoal.src.dtos;
 using BlogPessoal.src.models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlogPessoal.src.repositories.implements
 {
@@ -24,39 +26,39 @@ namespace BlogPessoal.src.repositories.implements
         #endregion Constructors
 
         #region Methods
-        public void AddTheme(AddThemeDTO theme)
+        public async Task AddThemeAsync(AddThemeDTO theme)
         {
-            _context.Themes.Add(new ThemeModel
+            await _context.Themes.AddAsync(new ThemeModel
             {
                 Description = theme.Description
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void DeleteTheme(int id)
+        public async Task DeleteThemeAsync(int id)
         {
-            _context.Themes.Remove(GetThemeById(id));
-            _context.SaveChanges();
+            _context.Themes.Remove(await GetThemeByIdAsync(id));
+            await _context.SaveChangesAsync();
         }
 
-        public List<ThemeModel> GetThemeByDescription(string description)
+        public async Task<List<ThemeModel>> GetThemeByDescriptionAsync(string description)
         {
-            return _context.Themes
+            return await _context.Themes
                 .Where(t => t.Description.Contains(description))
-                .ToList();
+                .ToListAsync();
         }
 
-        public ThemeModel GetThemeById(int id)
+        public async Task<ThemeModel> GetThemeByIdAsync(int id)
         {
-            return _context.Themes.FirstOrDefault(t => t.Id == id);
+            return await _context.Themes.FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public void UpdateTheme(UpdateThemeDTO theme)
+        public async Task UpdateThemeAsync(UpdateThemeDTO theme)
         {
-            var themeUpdate = GetThemeById(theme.Id);
+            var themeUpdate = await GetThemeByIdAsync(theme.Id);
             themeUpdate.Description = theme.Description;
             _context.Themes.Update(themeUpdate);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
         #endregion Methods
     }

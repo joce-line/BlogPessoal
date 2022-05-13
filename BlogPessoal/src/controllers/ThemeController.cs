@@ -2,6 +2,7 @@
 using BlogPessoal.src.repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BlogPessoal.src.controllers
 {
@@ -22,41 +23,41 @@ namespace BlogPessoal.src.controllers
         }
         #endregion
 
-        #region Métodos
+        #region Mhetods
 
         [HttpPost]
         [Authorize]
-        public IActionResult AddTheme([FromBody] AddThemeDTO theme)
+        public async Task<IActionResult> AddThemeAsync([FromBody] AddThemeDTO theme)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            _repository.AddTheme(theme);
+            await _repository.AddThemeAsync(theme);
             return Created($"api/Themes", theme);
         }
 
         [HttpPut]
         [Authorize(Roles = "ADMINISTRATOR")]
-        public IActionResult UpdateTheme([FromBody] UpdateThemeDTO theme)
+        public async Task<IActionResult> UpdateThemeAsync([FromBody] UpdateThemeDTO theme)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            _repository.UpdateTheme(theme);
+            await _repository.UpdateThemeAsync(theme);
             return Ok(theme);
         }
 
         [HttpDelete("deletar/{idTheme}")]
         [Authorize(Roles = "ADMINISTRATOR")]
-        public IActionResult DeleteTheme([FromRoute] int idTheme)
+        public async Task<IActionResult> DeleteThemeAsync([FromRoute] int idTheme)
         {
-            _repository.DeleteTheme(idTheme);
+            await _repository.DeleteThemeAsync(idTheme);
             return NoContent();
         }
 
         [HttpGet("id/{idTheme}")]
         [Authorize]
-        public IActionResult GetThemeById([FromRoute] int idTheme)
+        public async Task<IActionResult> GetThemeByIdAsync([FromRoute] int idTheme)
         {
-            var theme = _repository.GetThemeById(idTheme);
+            var theme = await _repository.GetThemeByIdAsync(idTheme);
 
             if (theme == null) return NotFound();
 
@@ -65,9 +66,9 @@ namespace BlogPessoal.src.controllers
 
         [HttpGet]
         [Authorize]
-        public IActionResult GetThemeByDescription([FromQuery] string descriptionTheme)
+        public async Task<IActionResult> GetThemeByDescriptionAsync([FromQuery] string descriptionTheme)
         {
-            var themes = _repository.GetThemeByDescription(descriptionTheme);
+            var themes = await _repository.GetThemeByDescriptionAsync(descriptionTheme);
 
             if (themes.Count < 1) return NoContent();
 

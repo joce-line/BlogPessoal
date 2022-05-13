@@ -22,7 +22,7 @@ namespace BlogPessoalTeste.Tests.repositories
 
         
         [TestMethod]
-        public void CreateFourThemesOnDatabaseReturnFour()
+        public async Task CreateFourThemesOnDatabaseReturnFour()
         {
 
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
@@ -33,10 +33,10 @@ namespace BlogPessoalTeste.Tests.repositories
             _repository = new ThemeRepository(_context);
 
             //GIVEN - Dado que registro 4 temas no banco de dados
-            _repository.AddTheme(new AddThemeDTO("CSharp"));
-            _repository.AddTheme(new AddThemeDTO("Phyton"));
-            _repository.AddTheme(new AddThemeDTO("Java"));
-            _repository.AddTheme(new AddThemeDTO("Backend"));
+            await _repository.AddThemeAsync(new AddThemeDTO("CSharp"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Phyton"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Java"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Backend"));
 
             //WHEN - Quando pesquiso
             //THEN - Então recebo 4 temas
@@ -44,7 +44,7 @@ namespace BlogPessoalTeste.Tests.repositories
         }
 
         [TestMethod]
-        public void GetThemeByIdReturnTheme1()
+        public async Task GetThemeByIdReturnTheme1()
         {
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
                .UseInMemoryDatabase(databaseName: "db_blogpessoal6")
@@ -54,13 +54,13 @@ namespace BlogPessoalTeste.Tests.repositories
             _repository = new ThemeRepository(_context);
 
             //GIVEN - Dado que registro 4 temas no banco de dados
-            _repository.AddTheme(new AddThemeDTO("CSharp"));
-            _repository.AddTheme(new AddThemeDTO("Phyton"));
-            _repository.AddTheme(new AddThemeDTO("Java"));
-            _repository.AddTheme(new AddThemeDTO("Backend"));
+            await _repository.AddThemeAsync(new AddThemeDTO("CSharp"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Phyton"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Java"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Backend"));
 
             //GIVEN - Dado que dou Id igual a 1
-            var theme = _repository.GetThemeById(3);
+            var theme = await _repository.GetThemeByIdAsync(3);
 
             //WHEN - Quando procuro pelo id
             //THEN - Então o tema deve ser CSharp
@@ -68,7 +68,7 @@ namespace BlogPessoalTeste.Tests.repositories
         }
 
         [TestMethod]
-        public void GetThemeByDescriptionReturnOneTheme()
+        public async Task GetThemeByDescriptionReturnTwoThemes()
         {
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
                .UseInMemoryDatabase(databaseName: "db_blogpessoal7")
@@ -77,22 +77,19 @@ namespace BlogPessoalTeste.Tests.repositories
             _context = new PersonalBlogContext(opt);
             _repository = new ThemeRepository(_context);
 
-            //GIVEN - Dado que registro 4 temas no banco de dados
-            _repository.AddTheme(new AddThemeDTO("CSharp"));
-            _repository.AddTheme(new AddThemeDTO("Phyton"));
-            _repository.AddTheme(new AddThemeDTO("Java"));
-            _repository.AddTheme(new AddThemeDTO("Backend"));
+            //GIVEN - Dado que registro 2 temas no banco de dados
+            await _repository.AddThemeAsync(new AddThemeDTO("Java"));
+            await _repository.AddThemeAsync(new AddThemeDTO("Javascript"));
+            
+            //WHEN - Quando pesquiso pela descrição Java
+            var themes = await _repository.GetThemeByDescriptionAsync("Java");
 
-            //GIVEN - Dado que pesquiso pela descrição Phyton
-            var themes = _repository.GetThemeByDescription("Phyton");
-
-            //WHEN - Quando pesquiso
-            //THEN - Então deve retornar 1 tema
-            Assert.AreEqual(1, themes.Count);
+            //THEN - Então deve retornar 2 tema
+            Assert.AreEqual(2, themes.Count);
         }
 
         [TestMethod]
-        public void UpdateThemeJavaReturnCSS()
+        public async Task UpdateThemeJavaReturnCSS()
         {
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
                .UseInMemoryDatabase(databaseName: "db_blogpessoal8")
@@ -102,20 +99,20 @@ namespace BlogPessoalTeste.Tests.repositories
             _repository = new ThemeRepository(_context);
 
             //GIVEN - Dado que registro 1 tema no banco de dados
-            _repository.AddTheme(new AddThemeDTO("CSharp"));
+            await _repository.AddThemeAsync(new AddThemeDTO("CSharp"));
 
 
-            //GIVEN - Dado que passo o id 1 e o tema CSS
-            var oldTheme = 
-            _repository.GetThemeById(1);
-            _repository.UpdateTheme(new UpdateThemeDTO(1, "CSS"));
+            //WHEN - Quando passo o id 1 e a descrição CSS            
+            await _repository.UpdateThemeAsync(new UpdateThemeDTO(1, "CSS"));
+
+            var theme = await _repository.GetThemeByIdAsync(1);
 
             //THEN - Então, quando validamos pesquisa deve retornar descrição CSS
-            Assert.AreEqual("CSS", _context.Themes.FirstOrDefault(t => t.Id == oldTheme.Id).Description);
+            Assert.AreEqual("CSS", theme.Description);
         }
 
         [TestMethod]        
-        public void DeleteThemesReturnNull()
+        public async Task DeleteThemesReturnNull()
         {
             var opt = new DbContextOptionsBuilder<PersonalBlogContext>()
                .UseInMemoryDatabase(databaseName: "db_blogpessoal9")
@@ -125,13 +122,13 @@ namespace BlogPessoalTeste.Tests.repositories
             _repository = new ThemeRepository(_context);
 
             //GIVEN - Dado que registro 1 tema no banco de dados
-            _repository.AddTheme(new AddThemeDTO("CSharp"));
+            await _repository.AddThemeAsync(new AddThemeDTO("CSharp"));
 
             //GIVEN - Dado o numero do Id 1
-            _repository.DeleteTheme(1);
+            await _repository.DeleteThemeAsync(1);
 
             //THEN - Então depois de deletar o tema 1 retornar nulo
-            Assert.IsNull(_repository.GetThemeById(1));
+            Assert.IsNull(await _repository.GetThemeByIdAsync(1));
 
         }
     }
