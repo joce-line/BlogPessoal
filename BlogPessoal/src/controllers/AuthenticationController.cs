@@ -1,6 +1,7 @@
 ﻿using BlogPessoal.src.dtos;
 using BlogPessoal.src.services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -25,6 +26,19 @@ namespace BlogPessoal.src.controllers
         #endregion
 
         #region Mhetods
+
+        /// <summary>
+        /// Asynchronous method for authenticate a user
+        /// </summary>
+        /// <param name="authentication">AuthenticationDTO</param>
+        /// <returns>ActionResult</returns>        
+        /// <response code="200">Authorized</response>
+        /// <response code="400">Error in request</response>
+        /// <response code="401">Not authorized</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> AuthenticationAsync([FromBody] AuthenticationDTO authentication)

@@ -1,6 +1,8 @@
 ﻿using BlogPessoal.src.dtos;
+using BlogPessoal.src.models;
 using BlogPessoal.src.repositories;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -24,9 +26,31 @@ namespace BlogPessoal.src.controllers
 
         #region Métodos
 
+        /// <summary>
+        /// Create a new post
+        /// </summary>
+        /// <param name="post">NewPostDTO</param>
+        /// <returns>ActionResult</returns>
+        /// <remarks>
+        /// Request example:
+        ///
+        ///     POST /api/Posts
+        ///     {
+        ///        "title": "Músicas para viajar",
+        ///        "description": "Indicações de músicas para ir para outro espaço",
+        ///        "photo": "URLFotoUniverso",
+        ///        "emailCreator": "joceline@domain.com",
+        ///        "descriptionTheme": "Música"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Return created post</response>
+        /// <response code="400">Error in request</response>
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(PostModel))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> NewPostAsync([FromBody] NewPostDTO post)
+        public async Task<ActionResult> NewPostAsync([FromBody] NewPostDTO post)
         {            
             if (!ModelState.IsValid) return BadRequest();
 
@@ -34,9 +58,31 @@ namespace BlogPessoal.src.controllers
             return Created($"api/Posts", post);
         }
 
+        /// <summary>
+        /// Update a post
+        /// </summary>
+        /// <param name="post">UpdatePostDTO</param>
+        /// <returns>ActionResult</returns>
+        /// <remarks>
+        /// Request example:
+        ///
+        ///     PUT /api/Posts
+        ///     {
+        ///        "id": 1,    
+        ///        "title": "Músicas para viajar",
+        ///        "description": "Indicações de músicas para ir para outro espaço",
+        ///        "photo": "URLFotoUniverso",
+        ///        "descriptionTheme": "Música"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Post updated</response>
+        /// <response code="400">Error in request</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdatePostAsync([FromBody] UpdatePostDTO post)
+        public async Task<ActionResult> UpdatePostAsync([FromBody] UpdatePostDTO post)
         {
             if (!ModelState.IsValid) return BadRequest();
 
@@ -44,17 +90,33 @@ namespace BlogPessoal.src.controllers
             return Ok(post);
         }
 
+        /// <summary>
+        /// Delete a post by id
+        /// </summary>
+        /// <param name="idPost">int</param>
+        /// <returns>ActionResult</returns>
+        /// <response code="204">Post deleted</response>
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [HttpDelete("delete/{idPost}")]
         [Authorize]
-        public async Task<IActionResult> DeletePostAsync([FromRoute] int idPost)
+        public async Task<ActionResult> DeletePostAsync([FromRoute] int idPost)
         {
             await _repository.DeletePostAsync(idPost);
             return NoContent();
         }
 
+        /// <summary>
+        /// Get a post by id
+        /// </summary>
+        /// <param name="idPost">int</param>
+        /// <returns>ActionResult</returns>
+        /// <response code="200">Returns the post</response>
+        /// <response code="404">Post not found<</response>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("id/{idPost}")]
         [Authorize]
-        public async Task<IActionResult> GetPostByIdAsync([FromRoute] int idPost)
+        public async Task<ActionResult> GetPostByIdAsync([FromRoute] int idPost)
         {
             var post = await _repository.GetPostByIdAsync(idPost);
 
@@ -63,9 +125,17 @@ namespace BlogPessoal.src.controllers
             return Ok(post);
         }
 
+        /// <summary>
+        /// Get all posts
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        /// <response code="200">Returns all posts</response>
+        /// <response code="204">No content<</response>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("list")]
         [Authorize]
-        public async Task<IActionResult> GetAllPostsAsync()
+        public async Task<ActionResult> GetAllPostsAsync()
         {
             var list = await _repository.GetAllPostsAsync();
 
@@ -74,9 +144,20 @@ namespace BlogPessoal.src.controllers
             return Ok(list);
         }
 
-        [HttpGet]
+        /// <summary>
+        /// Get posts by title or description theme or name creator
+        /// </summary>
+        /// <param name="title">string</param>
+        /// <param name="descriptionTheme">string</param>
+        /// <param name="nameCreator">string</param>
+        /// <returns>ActionResult</returns>
+        /// <response code="200">Returns the posts</response>
+        /// <response code="204">No content</response>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [HttpGet("search")]
         [Authorize]
-        public async Task<IActionResult> GetPostBySearchAsync(
+        public async Task<ActionResult> GetPostBySearchAsync(
             [FromQuery] string title,
             [FromQuery] string descriptionTheme,
             [FromQuery] string nameCreator)
