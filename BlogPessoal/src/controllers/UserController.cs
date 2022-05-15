@@ -39,7 +39,7 @@ namespace BlogPessoal.src.controllers
         /// <param name="idUser">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="200">Returns the user</response>
-        /// <response code="404">User not found<</response>
+        /// <response code="404">User not found</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("id/{idUser}")]
@@ -56,7 +56,7 @@ namespace BlogPessoal.src.controllers
         /// </summary>
         /// <param name="nameUser">string</param>
         /// <returns>ActionResult</returns>
-        /// <response code="200">Returns the user<</response>
+        /// <response code="200">Returns the user</response>
         /// <response code="204">Name not found</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(UserModel))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -97,11 +97,11 @@ namespace BlogPessoal.src.controllers
         ///
         ///     POST /api/Users
         ///     {
-        ///        "nome": "Joceline Gutierrez",
+        ///        "name": "Joceline Gutierrez",
         ///        "email": "joceline@domain.com",
-        ///        "senha": "12345",
-        ///        "foto": "URLFOTO",
-        ///        "tipo": "NORMAL"
+        ///        "password": "12345",
+        ///        "photo": "URLFOTO",
+        ///        "type": "NORMAL"
         ///     }
         ///
         /// </remarks>
@@ -168,13 +168,23 @@ namespace BlogPessoal.src.controllers
         /// <param name="idUser">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="204">User deleted</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <response code="403">Returns forbidden access</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpDelete("delete/{idUser}")]
         [Authorize(Roles = "ADMINISTRATOR")]
         public async Task<ActionResult> DeleteUserAsync([FromRoute] int idUser)
         {
-            await _repository.DeleteUserAsync(idUser);
-            return NoContent();
+            try
+            {
+                await _repository.DeleteUserAsync(idUser);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Forbid(ex.Message);
+            }
+            
         }
 
         #endregion

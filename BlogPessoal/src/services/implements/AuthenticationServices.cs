@@ -35,7 +35,7 @@ namespace BlogPessoal.src.services.implements
         #region Methods
 
         /// <summary>
-        /// <para>Resume: Asynchronous method responsible for create user without duplicate on data base</para>
+        /// <para>Resume: Asynchronous method responsible for create user without duplicate on database</para>
         /// </summary>
         /// <param name="dto">AddUserDTO</param>
         public async Task CreateUserNotDuplicatedAsync(AddUserDTO dto)
@@ -47,9 +47,9 @@ namespace BlogPessoal.src.services.implements
         }
 
         /// <summary>
-        /// <para>Resume: Asynchronous method for encode password</para>
+        /// <para>Resume: Method for encode password</para>
         /// </summary>
-        /// <param name="password">Password to be encryped</param>
+        /// <param name="password">Password to be encrypted</param>
         /// <returns>string</returns>
         public string EncodePassword(string password)
         {
@@ -58,7 +58,7 @@ namespace BlogPessoal.src.services.implements
         }
 
         /// <summary>
-        /// <para>Resume: Asynchronous method for generate token</para>
+        /// <para>Resume: Method responsible for generate token JWT</para>
         /// </summary>
         /// <param name="user">UserModel</param>
         /// <returns>string</returns>

@@ -25,20 +25,29 @@ namespace BlogPessoal.src.controllers
         }
         #endregion
 
-        #region Mhetods
+        #region Methods
 
         /// <summary>
-        /// Asynchronous method for authenticate a user
+        /// Get Authorization
         /// </summary>
         /// <param name="authentication">AuthenticationDTO</param>
-        /// <returns>ActionResult</returns>        
-        /// <response code="200">Authorized</response>
+        /// <returns>ActionResult</returns>
+        /// <remarks>
+        /// Request example:
+        ///
+        ///     POST /api/Authentication
+        ///     {
+        ///        "email": "joceline@domain.com",
+        ///        "senha": "12345"
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="200">Return user created with token</response>
         /// <response code="400">Error in request</response>
-        /// <response code="401">Not authorized</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <response code="401">Invalid email or password</response>
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthorizationDTO))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]        
         [HttpPost]
         [AllowAnonymous]
         public async Task<ActionResult> AuthenticationAsync([FromBody] AuthenticationDTO authentication)

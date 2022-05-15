@@ -96,7 +96,7 @@ namespace BlogPessoal.src.controllers
         /// <param name="idPost">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="204">Post deleted</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete("delete/{idPost}")]
         [Authorize]
         public async Task<ActionResult> DeletePostAsync([FromRoute] int idPost)
@@ -106,12 +106,12 @@ namespace BlogPessoal.src.controllers
         }
 
         /// <summary>
-        /// Get a post by id
+        /// Get post by id
         /// </summary>
         /// <param name="idPost">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="200">Returns the post</response>
-        /// <response code="404">Post not found<</response>
+        /// <response code="404">Post not found</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("id/{idPost}")]
@@ -129,10 +129,10 @@ namespace BlogPessoal.src.controllers
         /// Get all posts
         /// </summary>
         /// <returns>ActionResult</returns>
-        /// <response code="200">Returns all posts</response>
-        /// <response code="204">No content<</response>
+        /// <response code="200">List of posts</response>
+        /// <response code="204">Empty list</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpGet("list")]
         [Authorize]
         public async Task<ActionResult> GetAllPostsAsync()
@@ -145,14 +145,14 @@ namespace BlogPessoal.src.controllers
         }
 
         /// <summary>
-        /// Get posts by title or description theme or name creator
+        /// Get posts by search
         /// </summary>
         /// <param name="title">string</param>
         /// <param name="descriptionTheme">string</param>
         /// <param name="nameCreator">string</param>
         /// <returns>ActionResult</returns>
         /// <response code="200">Returns the posts</response>
-        /// <response code="204">No content</response>
+        /// <response code="204">Post does not exist for this search</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PostModel))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpGet("search")]

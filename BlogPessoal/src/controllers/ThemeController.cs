@@ -4,6 +4,7 @@ using BlogPessoal.src.repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
 
 namespace BlogPessoal.src.controllers
@@ -72,16 +73,26 @@ namespace BlogPessoal.src.controllers
         /// </remarks>
         /// <response code="200">Theme updated</response>
         /// <response code="400">Error in request</response>
+        /// <response code="403">Returns forbidden access</response>
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpPut]
         [Authorize(Roles = "ADMINISTRATOR")]
         public async Task<ActionResult> UpdateThemeAsync([FromBody] UpdateThemeDTO theme)
         {
             if (!ModelState.IsValid) return BadRequest();
 
-            await _repository.UpdateThemeAsync(theme);
-            return Ok(theme);
+            try
+            {
+                await _repository.UpdateThemeAsync(theme);
+                return Ok(theme);
+            }
+            catch (Exception ex)
+            {
+                return Forbid(ex.Message);
+            }
+            
         }
 
         /// <summary>
@@ -90,13 +101,23 @@ namespace BlogPessoal.src.controllers
         /// <param name="idTheme">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="204">Theme deleted</response>
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        /// <response code="403">Returns forbidden access</response>
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [HttpDelete("delete/{idTheme}")]
         [Authorize(Roles = "ADMINISTRATOR")]
         public async Task<ActionResult> DeleteThemeAsync([FromRoute] int idTheme)
         {
-            await _repository.DeleteThemeAsync(idTheme);
-            return NoContent();
+            try
+            {
+                await _repository.DeleteThemeAsync(idTheme);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Forbid(ex.Message);
+            }
+            
         }
 
         /// <summary>
@@ -105,7 +126,7 @@ namespace BlogPessoal.src.controllers
         /// <param name="idTheme">int</param>
         /// <returns>ActionResult</returns>
         /// <response code="200">Returns the theme</response>
-        /// <response code="404">Theme not found<</response>
+        /// <response code="404">Theme not found</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ThemeModel))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [HttpGet("id/{idTheme}")]
@@ -124,7 +145,7 @@ namespace BlogPessoal.src.controllers
         /// </summary>
         /// <param name="descriptionTheme">string</param>
         /// <returns>ActionResult</returns>
-        /// <response code="200">Returns the theme<</response>
+        /// <response code="200">Returns the theme</response>
         /// <response code="204">Theme not found</response>
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ThemeModel))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
