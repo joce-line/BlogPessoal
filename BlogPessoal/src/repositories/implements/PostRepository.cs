@@ -53,8 +53,8 @@ namespace BlogPessoal.src.repositories.implements
         /// </summary>
         /// <returns>List of PostModel</returns>
         public async Task<List<PostModel>> GetAllPostsAsync()
-        {
-            return await _context.Posts
+        {            
+            return await _context.Posts                
                 .ToListAsync();
         }
 
