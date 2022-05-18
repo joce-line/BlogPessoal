@@ -40,15 +40,13 @@ namespace BlogPessoal
             if (Configuration["Enviroment:Start"] == "PROD")
             {
                 services.AddEntityFrameworkNpgsql()
-                .AddDbContext<PersonalBlogContext>(
-                opt =>
-                opt.UseNpgsql(Configuration["ConnectionStringsProd:DefaultConnection"]));
+                    .AddDbContext<PersonalBlogContext>(
+                    opt => opt.UseNpgsql(Configuration["ConnectionStringsProd:DefaultConnection"]));
             }
             else
             {
                 services.AddDbContext<PersonalBlogContext>(
-                opt =>
-                opt.UseSqlServer(Configuration["ConnectionStringsDev:DefaultConnection"]));
+                opt => opt.UseSqlServer(Configuration["ConnectionStringsDev:DefaultConnection"]));
             }
             
             // Repositorios
@@ -64,7 +62,7 @@ namespace BlogPessoal
             services.AddScoped<IAuthentication, AuthenticationServices>();
 
             // Configuração do Token Autenticação JWTBearer
-            var chave = Encoding.ASCII.GetBytes(Configuration["Settings:Secret"]);
+            var key = Encoding.ASCII.GetBytes(Configuration["Settings:Secret"]);
             services.AddAuthentication(a =>
             {
                 a.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -76,7 +74,7 @@ namespace BlogPessoal
                 b.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(chave),
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
@@ -113,7 +111,7 @@ namespace BlogPessoal
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = (Path.Combine(AppContext.BaseDirectory, xmlFile));
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 s.IncludeXmlComments(xmlPath);
             });
         }
@@ -121,7 +119,7 @@ namespace BlogPessoal
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, PersonalBlogContext context)
         {
-
+            // Ambiente de Desenvolvimento
             if (env.IsDevelopment())
             {
                 context.Database.EnsureCreated();
@@ -145,10 +143,12 @@ namespace BlogPessoal
 
             // Rotas
             app.UseRouting();
+
             app.UseCors(c => c
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                );
 
             // Autenticação e Autorização
             app.UseAuthentication();

@@ -53,6 +53,7 @@ namespace BlogPessoal.src.controllers
         public async Task<ActionResult> AuthenticationAsync([FromBody] AuthenticationDTO authentication)
         {
             if (!ModelState.IsValid) return BadRequest();
+
             try
             {
                 var authorization = await _services.GetAuthorizationAsync(authentication);

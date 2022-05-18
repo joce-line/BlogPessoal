@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 namespace BlogPessoal.src.dtos
 {
     /// <summary>
-    /// <para>Resume: Mirror class responsible for transporting login information.</para>
+    /// <para>Resume: Mirror class responsible for transporting login information</para>
     /// <para>Created by: Joceline Gutierrez</para>
     /// <para>Version: 1.0</para>
     /// <para>Date: 12/05/2022</para>

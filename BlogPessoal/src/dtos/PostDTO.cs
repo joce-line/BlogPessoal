@@ -36,7 +36,7 @@ namespace BlogPessoal.src.dtos
 
     /// <summary>
     /// <para>Resume: Mirror class responsible for update a new post</para>
-    /// <para>Criate by: Joceline Gutierrez</para>
+    /// <para>Created by: Joceline Gutierrez</para>
     /// <para>Version: 1.0</para>
     /// <para>Date: 29/04/2022</para>
     /// </summary>
